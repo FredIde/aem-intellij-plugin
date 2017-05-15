@@ -18,7 +18,9 @@ object HtlJavaUseApiClassesProvider : CompletionProvider<CompletionParameters>()
     }
 
     private fun javaUseApiClasses(project: Project): Collection<LookupElement> {
-        return (HtlJavaSearch.useApiImplementers(project) + HtlJavaSearch.slingModels(project))
+        val useApiImplementers = HtlJavaSearch.getInstance()?.useApiImplementers(project) ?: emptyList()
+        val slingModels = HtlJavaSearch.getInstance()?.slingModels(project) ?: emptyList()
+        return (useApiImplementers + slingModels)
                 .map { it.toLookupElement() }
     }
 

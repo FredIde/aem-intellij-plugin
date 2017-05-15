@@ -57,6 +57,7 @@
   ]
 
   mixin("template_comment")="co.nums.intellij.aem.htl.psi.mixins.HtlCommentMixin"
+  mixin("variable")="co.nums.intellij.aem.htl.psi.mixins.HtlVariableMixin"
 }
 
 interpolation ::= (expression | template_comment | outer_text)*

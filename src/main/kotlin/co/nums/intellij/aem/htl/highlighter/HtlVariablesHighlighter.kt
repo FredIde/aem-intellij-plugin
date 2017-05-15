@@ -12,10 +12,16 @@ class HtlVariablesHighlighter : Annotator {
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         if (element is HtlVariable) {
-            val isGlobal = globalVariableNames.contains(element.text)
-            val color = if (isGlobal) HtlHighlighterColors.GLOBAL_OBJECT else HtlHighlighterColors.BLOCK_VARIABLE
-            holder.highlightText(element.textRange, color)
+            when {
+                element.isGlobalObject() -> holder.highlightText(element, HtlHighlighterColors.GLOBAL_OBJECT)
+                element.isBlockVariable() -> holder.highlightText(element, HtlHighlighterColors.BLOCK_VARIABLE)
+                else -> holder.createReferenceErrorAnnotation(element, "Unresolved reference: ${element.text}")
+            }
         }
     }
+
+    private fun HtlVariable.isGlobalObject() = globalVariableNames.contains(text)
+
+    private fun HtlVariable.isBlockVariable() = reference?.resolve() != null
 
 }

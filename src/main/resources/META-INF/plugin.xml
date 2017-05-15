@@ -117,6 +117,34 @@
 				implementationClass="co.nums.intellij.aem.htl.inspections.HtlIncorrectBlockTypeAnnotator"
 				order="after htlBlocksHighlighter"/>
 
+		<lang.elementManipulator
+				forClass="co.nums.intellij.aem.htl.psi.HtlVariable"
+				implementationClass="co.nums.intellij.aem.htl.psi.manipulator.HtlVariableManipulator"/>
+
+		<psi.referenceContributor
+				language="HTML"
+				implementation="co.nums.intellij.aem.htl.psi.HtlVariablesReferenceContributor"/>
+
+		<targetElementEvaluator
+				language="HTL"
+				implementationClass="co.nums.intellij.aem.htl.psi.HtlTargetElementEvaluator"/>
+
+		<readWriteAccessDetector
+				implementation="co.nums.intellij.aem.htl.highlighter.HtlReadWriteAccessDetector"/>
+
+		<lang.findUsagesProvider
+				language="HTML"
+				order="first"
+				implementationClass="co.nums.intellij.aem.htl.findusages.HtlVariablesFindUsagesProvider"/>
+
+		<renamePsiElementProcessor
+				order="before xmlAttribute"
+				implementation="co.nums.intellij.aem.htl.refactoring.RenameHtlVariableProcessor"/>
+
+		<nameSuggestionProvider
+				order="first"
+				implementation="co.nums.intellij.aem.htl.refactoring.HtlVariableNameSuggestionProvider"/>
+
 	</extensions>
 
 </idea-plugin>

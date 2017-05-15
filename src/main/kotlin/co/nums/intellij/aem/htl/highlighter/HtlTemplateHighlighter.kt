@@ -2,6 +2,8 @@ package co.nums.intellij.aem.htl.highlighter
 
 import co.nums.intellij.aem.htl.HtlLanguage
 import co.nums.intellij.aem.htl.psi.HtlTypes
+import com.intellij.lang.Language
+import com.intellij.lang.PerFileMappingsBase
 import com.intellij.openapi.editor.colors.EditorColorsScheme
 import com.intellij.openapi.editor.ex.util.LayerDescriptor
 import com.intellij.openapi.editor.ex.util.LayeredLexerEditorHighlighter
@@ -25,13 +27,14 @@ class HtlTemplateHighlighter(project: Project?, virtualFile: VirtualFile?, color
         registerLayer(HtlTypes.OUTER_TEXT, LayerDescriptor(outerLanguageHighlighter, ""))
     }
 
-    private fun getOuterSyntaxHighlighter(project: Project?, virtualFile: VirtualFile?): SyntaxHighlighter? {
+    private fun getOuterSyntaxHighlighter(project: Project?, file: VirtualFile?): SyntaxHighlighter? {
         var fileType: FileType = StdFileTypes.PLAIN_TEXT
-        if (project != null && virtualFile != null) {
-            val language = TemplateDataLanguageMappings.getInstance(project).getMapping(virtualFile)
+        if (project != null && file != null) {
+            val mappings: PerFileMappingsBase<Language> = TemplateDataLanguageMappings.getInstance(project)
+            val language = mappings.getMapping(file)
             fileType = language?.associatedFileType ?: HtlLanguage.getTemplateLanguageFileType()
         }
-        return SyntaxHighlighterFactory.getSyntaxHighlighter(fileType, project, virtualFile)
+        return SyntaxHighlighterFactory.getSyntaxHighlighter(fileType, project, file)
     }
 
 }

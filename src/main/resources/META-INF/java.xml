@@ -1,5 +1,8 @@
 <idea-plugin url="https://www.jetbrains.com/idea">
 	<extensions defaultExtensionNs="com.intellij">
+		<applicationService
+				serviceInterface="co.nums.intellij.aem.htl.psi.search.HtlJavaSearch"
+				serviceImplementation="co.nums.intellij.aem.htl.psi.search.HtlJavaSearch"/>
 		<completion.contributor
 				language="HTML"
 				implementationClass="co.nums.intellij.aem.htl.completion.contributor.HtmlJavaCompletionContributor"/>
