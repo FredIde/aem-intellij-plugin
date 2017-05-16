@@ -13,10 +13,7 @@ import com.intellij.psi.util.PsiTreeUtil
 
 abstract class HtlVariableMixin(node: ASTNode) : ASTWrapperPsiElement(node), PsiNameIdentifierOwner {
 
-    override fun getReference(): HtlVariableReference? {
-        val htlVariable = node.psi as? HtlVariable ?: return null
-        return HtlVariableReference(htlVariable)
-    }
+    override fun getReference() = HtlVariableReference(this as HtlVariable)
 
     override fun setName(name: String): PsiElement? {
         createIdentifier(name)?.let {

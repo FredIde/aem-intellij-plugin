@@ -40,7 +40,8 @@ class HtlPsiReferenceProvider : PsiReferenceProvider() {
     override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
         val attribute = element as? XmlAttribute ?: return emptyArray()
         val variableReferences: MutableList<PsiReference> = htlVariablesDeclaredBy(attribute)
-                .map(::HtlVariableReference)
+                .map { it.reference }
+                .filterNotNull()
                 .toMutableList()
         variableReferences.add(HtlVariableBlockReference(element as XmlAttributeImpl))
         return variableReferences.toTypedArray()

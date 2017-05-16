@@ -7,12 +7,17 @@ import co.nums.intellij.aem.htl.psi.search.HtlSearch
 import com.intellij.lang.StdLanguages
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceBase
+import com.intellij.psi.impl.source.resolve.ResolveCache
 import java.util.*
+
 
 class HtlVariableReference(htlVariable: HtlVariable) : PsiReferenceBase<HtlVariable>(htlVariable) {
 
-    override fun resolve(): PsiElement? {
-        val variableName = element.identifier.text
+    override fun resolve() = ResolveCache.getInstance(element.project)
+            .resolveWithCaching(this, { reference, incompleteCode -> doResolve(reference) }, false, false)
+
+    private fun doResolve(reference: HtlVariableReference): PsiElement? {
+        val variableName = reference.element.identifier.text
         return HtlJavaSearch.getInstance()?.globalObjectJavaClass(element.project, variableName)
                 ?: blockVariableAttribute(variableName)
     }
@@ -39,6 +44,10 @@ class HtlVariableReference(htlVariable: HtlVariable) : PsiReferenceBase<HtlVaria
     private fun HtlBlockVariable.isDeclaredBeforeElement() = definer.textOffset < element.textOffset
 
     override fun getVariants() = emptyArray<Any>()
+
+    override fun equals(other: Any?) = other is HtlVariableReference && element === other.element
+
+    override fun hashCode() = element.hashCode()
 
 }
 
